@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>loading...</title>
+    <meta name="color-scheme" content="light dark">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/github-markdown.css">
+</head>
+<body class="markdown-body" style="max-width: 70ch; margin: 1em auto; padding: 0 2ch;">
+    <script id="__END__" src="https://cdn.jsdelivr.net/npm/marked"></script>
+    <script type="module">
+        const __END__ = document.getElementById('__END__')
+        const source = new EventSource('/__source')
+        const template = document.createElement('template')
+        const body = document.body
+        source.onmessage = ({ data }) => {
+            const text = JSON.parse(data)
+            template.innerHTML = marked(text)
+            const node = template.content.cloneNode(true)
+            while (body.firstChild !== __END__) {
+                body.removeChild(body.firstChild)
+            }
+            body.insertBefore(node, __END__)
+            requestAnimationFrame(() => {
+                const maybeTitle = document.querySelector('h1, h2')
+                document.title = maybeTitle ? maybeTitle.textContent : 'Untitled'
+            })
+        }
+    </script>
+</body>
+</html>

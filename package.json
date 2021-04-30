@@ -1,0 +1,16 @@
+{
+  "name": "@hyrious/marked-cli",
+  "version": "0.1.0",
+  "description": "Preview markdown file with marked.",
+  "bin": "bin.mjs",
+  "scripts": {
+    "test": "node bin.mjs README.md"
+  },
+  "keywords": [
+    "markdown",
+    "cli"
+  ],
+  "repository": "hyrious/marked-cli",
+  "author": "hyrious <hyrious@outlook.com>",
+  "license": "MIT"
+}
