@@ -37,7 +37,11 @@ http.createServer(async (req, res) => {
         res.write(`data: ${JSON.stringify(await fs.promises.readFile(source, "utf-8"))}\n\n`);
         return clients.add(res);
     }
-    res.writeHead(200).end(await fs.promises.readFile(indexHTML, "utf-8"));
+    if (['/', '/index.html'].includes(url.pathname)) {
+        res.writeHead(200).end(await fs.promises.readFile(indexHTML, "utf-8"));
+    } else {
+        res.writeHead(404).end("Not found");
+    }
 }).listen(5000, () => {
     console.log("serving http://localhost:5000");
 });
