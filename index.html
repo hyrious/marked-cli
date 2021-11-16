@@ -28,7 +28,7 @@
         const body = document.body
         source.onmessage = ({ data }) => {
             const text = JSON.parse(data)
-            template.innerHTML = marked(text, {
+            template.innerHTML = marked.parse(text, {
                 highlight(code, lang) {
                     const language = hljs.getLanguage(lang) ? lang : 'plaintext'
                     return hljs.highlight(code, { language }).value
