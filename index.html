@@ -6,40 +6,51 @@
     <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/github-markdown.css">
-    <link rel="stylesheet" id="__light__" data-href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.0.1/build/styles/github.min.css">
-    <link rel="stylesheet" id="__dark__" data-href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.0.1/build/styles/github-dark.min.css">
+    <link rel="stylesheet" id="__hljs__">
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.0.1/build/highlight.min.js"></script>
 </head>
 <body class="markdown-body" style="max-width: 70ch; margin: 1em auto; padding: 0 2ch;">
     <script id="__END__" src="https://cdn.jsdelivr.net/npm/marked"></script>
     <script type="module">
-        const light = document.getElementById('__light__')
-        const dark = document.getElementById('__dark__')
+        const light = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/github.min.css"
+        const dark = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/github-dark.min.css"
+        const themeLink = document.getElementById("__hljs__")
         const darkTheme = matchMedia('(prefers-color-scheme: dark)')
         darkTheme.onchange = ({ matches }) => {
-            (matches ? light : dark).href = ""
-            const current = matches ? dark : light
-            current.href = current.dataset.href
+            themeLink.href = matches ? dark : light
         }
         darkTheme.onchange(darkTheme)
         const __END__ = document.getElementById('__END__')
         const source = new EventSource('/__source')
         const template = document.createElement('template')
         const body = document.body
-        source.onmessage = ({ data }) => {
-            const text = JSON.parse(data)
-            template.innerHTML = marked.parse(text, {
+        marked.use({
+            renderer: {
                 highlight(code, lang) {
                     const language = hljs.getLanguage(lang) ? lang : 'plaintext'
                     return hljs.highlight(code, { language }).value
+                },
+                listitem(text, task, checked) {
+                    text = text.replace('type="checkbox">', 'class="task-list-item-checkbox" type="checkbox">')
+                    return '<li class="task-list-item">' + text + '</li>'
+                },
+                list(body, ordered, start) {
+                    const tag = ordered ? 'ol' : 'ul'
+                    return '<' + tag + ' class="contains-task-list">' + body + '</' + tag + '>'
                 }
-            })
+            }
+        })
+        let raf = 0
+        source.onmessage = ({ data }) => {
+            const text = JSON.parse(data)
+            template.innerHTML = marked.parse(text)
             const node = template.content.cloneNode(true)
             while (body.firstChild !== __END__) {
                 body.removeChild(body.firstChild)
             }
             body.insertBefore(node, __END__)
-            requestAnimationFrame(() => {
+            cancelAnimationFrame(raf)
+            raf = requestAnimationFrame(() => {
                 const maybeTitle = document.querySelector('h1, h2')
                 document.title = maybeTitle ? maybeTitle.textContent : 'Untitled'
             })
