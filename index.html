@@ -33,12 +33,21 @@
         marked.use({
             renderer: {
                 listitem(text, task, checked) {
-                    text = text.replace('type="checkbox">', 'class="task-list-item-checkbox" type="checkbox">')
-                    return '<li class="task-list-item">' + text + '</li>'
+                    if (task) {
+                        text = text.replace('type="checkbox">', checked
+                            ? 'class="task-list-item-checkbox" type="checkbox" checked>'
+                            : 'class="task-list-item-checkbox" type="checkbox">'
+                        )
+                        return '<li class="task-list-item">' + text + '</li>'
+                    }
+                    return '<li>' + text + '</li>'
                 },
                 list(body, ordered, start) {
                     const tag = ordered ? 'ol' : 'ul'
-                    return '<' + tag + ' class="contains-task-list">' + body + '</' + tag + '>'
+                    const suffix = body.includes('<li class="task-list-item">')
+                        ? ' class="contains-task-list">'
+                        : '>'
+                    return '<' + tag + suffix + body + '</' + tag + '>'
                 }
             }
         })
