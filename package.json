@@ -1,6 +1,6 @@
 {
   "name": "@hyrious/marked-cli",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Preview markdown file with marked.",
   "bin": "bin.mjs",
   "scripts": {
