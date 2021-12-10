@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/github-markdown.css">
     <link rel="stylesheet" id="__hljs__">
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.0.1/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
 </head>
 <body class="markdown-body" style="max-width: 70ch; margin: 1em auto; padding: 0 2ch;">
     <script id="__END__" src="https://cdn.jsdelivr.net/npm/marked"></script>
@@ -24,12 +24,14 @@
         const source = new EventSource('/__source')
         const template = document.createElement('template')
         const body = document.body
+        marked.setOptions({
+            highlight(code, lang) {
+                const language = hljs.getLanguage(lang) ? lang : 'plaintext'
+                return hljs.highlight(code, { language }).value
+            }
+        })
         marked.use({
             renderer: {
-                highlight(code, lang) {
-                    const language = hljs.getLanguage(lang) ? lang : 'plaintext'
-                    return hljs.highlight(code, { language }).value
-                },
                 listitem(text, task, checked) {
                     text = text.replace('type="checkbox">', 'class="task-list-item-checkbox" type="checkbox">')
                     return '<li class="task-list-item">' + text + '</li>'
