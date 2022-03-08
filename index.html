@@ -7,23 +7,40 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/github-markdown.css">
     <link rel="stylesheet" id="__hljs__">
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"></script>
+    <style>.mermaid { text-align: center; }</style>
 </head>
 <body class="markdown-body" style="max-width: 70ch; margin: 1em auto; padding: 0 2ch;">
     <script id="__END__" src="https://cdn.jsdelivr.net/npm/marked"></script>
     <script type="module">
-        const light = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/github.min.css"
-        const dark = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.3.1/build/styles/github-dark.min.css"
+        const mermaidLink = document.createElement('script')
+        mermaidLink.src = 'https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js'
+        const light = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/github.min.css"
+        const dark = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/github-dark.min.css"
         const themeLink = document.getElementById("__hljs__")
         const darkTheme = matchMedia('(prefers-color-scheme: dark)')
         darkTheme.onchange = ({ matches }) => {
             themeLink.href = matches ? dark : light
         }
         darkTheme.onchange(darkTheme)
+        const refreshMermaid = () => {
+            Array.from(body.querySelectorAll('.mermaid')).forEach((e, i) => {
+                if (!(typeof mermaid < 'u') || e.dataset.processed) return
+                mermaid.mermaidAPI.render(`mermaid-${i}`, e.textContent, (svg) => {
+                    e.innerHTML = svg
+                })
+            })
+        }
+        mermaidLink.onload = () => {
+            const { matches } = darkTheme
+            mermaid.initialize({ startOnLoad: false, theme: matches ? 'dark' : 'default' })
+            refreshMermaid()
+        }
         const __END__ = document.getElementById('__END__')
         const source = new EventSource('/__source')
         const template = document.createElement('template')
         const body = document.body
+        body.appendChild(mermaidLink)
         marked.setOptions({
             highlight(code, lang) {
                 const language = hljs.getLanguage(lang) ? lang : 'plaintext'
@@ -48,7 +65,13 @@
                         ? ' class="contains-task-list">'
                         : '>'
                     return '<' + tag + suffix + body + '</' + tag + '>'
-                }
+                },
+                code(code, lang) {
+                    if (lang === 'mermaid') {
+                        return '<div class="mermaid">' + code + '</div>'
+                    }
+                    return false
+                },
             }
         })
         let raf = 0
@@ -64,6 +87,7 @@
             raf = requestAnimationFrame(() => {
                 const maybeTitle = document.querySelector('h1, h2')
                 document.title = maybeTitle ? maybeTitle.textContent : 'Untitled'
+                refreshMermaid()
             })
         }
     </script>

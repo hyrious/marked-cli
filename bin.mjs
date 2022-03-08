@@ -10,7 +10,7 @@ if (args.includes("--help")) {
     process.exit(0);
 }
 
-const source = args[args.length - 1];
+const source = args[args.length - 1] || "README.md";
 if (!fs.existsSync(source)) {
     console.error("file not found:", source);
     process.exit(1);
@@ -35,6 +35,7 @@ http.createServer(async (req, res) => {
             'Connection': 'keep-alive',
         });
         res.write(`data: ${JSON.stringify(await fs.promises.readFile(source, "utf-8"))}\n\n`);
+        res.once('close', () => clients.delete(res))
         return clients.add(res);
     }
     if (['/', '/index.html'].includes(url.pathname)) {
