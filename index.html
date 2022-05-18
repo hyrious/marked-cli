@@ -5,18 +5,18 @@
     <title>loading...</title>
     <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/github-markdown.css">
+    <link rel="stylesheet" href="/vendors/github-markdown.css">
     <link rel="stylesheet" id="__hljs__">
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/highlight.min.js"></script>
+    <script src="/vendors/highlight.min.js"></script>
     <style>.mermaid { text-align: center; }</style>
 </head>
 <body class="markdown-body" style="max-width: 70ch; margin: 1em auto; padding: 0 2ch;">
-    <script id="__END__" src="https://cdn.jsdelivr.net/npm/marked"></script>
+    <script id="__END__" src="/vendors/marked.min.js"></script>
     <script type="module">
         const mermaidLink = document.createElement('script')
-        mermaidLink.src = 'https://cdn.jsdelivr.net/npm/mermaid@8.14.0/dist/mermaid.min.js'
-        const light = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/github.min.css"
-        const dark = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.4.0/build/styles/github-dark.min.css"
+        mermaidLink.src = '/vendors/mermaid.min.js'
+        const light = "/vendors/github.min.css"
+        const dark = "/vendors/github-dark.min.css"
         const themeLink = document.getElementById("__hljs__")
         const darkTheme = matchMedia('(prefers-color-scheme: dark)')
         darkTheme.onchange = ({ matches }) => {

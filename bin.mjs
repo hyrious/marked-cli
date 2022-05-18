@@ -41,7 +41,18 @@ http.createServer(async (req, res) => {
     if (['/', '/index.html'].includes(url.pathname)) {
         res.writeHead(200).end(await fs.promises.readFile(indexHTML, "utf-8"));
     } else {
-        res.writeHead(404).end("Not found");
+        const maybeFile = new URL(url.pathname.slice(1), import.meta.url);
+        if (fs.existsSync(maybeFile)) {
+            const ext = url.pathname.slice(url.pathname.lastIndexOf('.') + 1);
+            const contentType = {
+                js: 'application/javascript',
+                css: 'text/css',
+            }[ext] || 'text/plain';
+            res.writeHead(200, { 'Content-Type': contentType });
+            fs.createReadStream(maybeFile).pipe(res);
+        } else {
+            res.writeHead(404).end("Not found");
+        }
     }
 }).listen(5000, () => {
     console.log("serving http://localhost:5000");

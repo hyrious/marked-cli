@@ -3,6 +3,12 @@
   "version": "0.1.7",
   "description": "Preview markdown file with marked.",
   "bin": "bin.mjs",
+  "files": [
+    "bin.mjs",
+    "index.js",
+    "index.html",
+    "vendors"
+  ],
   "scripts": {
     "test": "node bin.mjs README.md"
   },
