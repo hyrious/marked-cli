@@ -6,8 +6,10 @@
     <meta name="color-scheme" content="light dark">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="/vendors/github-markdown.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.6/katex.min.css" integrity="sha512-kZNsJznccVXEWz7/xUNAv9kZb0rikSLqgv6s0KRa64HBdiTKODczgMh/a61gIFTsyEK7BlJeTdfptyeRucj0gA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" id="__hljs__">
     <script src="/vendors/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.15.6/katex.min.js" integrity="sha512-ZzM/Uqhj1eqNuEJogsoiJ502Z42nrIk1PS6NBSZswLpNSXyWyRBqxcM1S3Z5fP8ZmIXIpUFYWxgQHriLfGr1XQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>.mermaid { text-align: center; }</style>
 </head>
 <body class="markdown-body" style="max-width: 70ch; margin: 1em auto; padding: 0 2ch;">
@@ -48,6 +50,43 @@
             }
         })
         marked.use({
+            tokenizer: {
+                code(src) {
+                    const match = src.match(/^\$\$([\s\S]+?)\$\$/)
+                    if (match) {
+                        return {
+                            type: 'math-block',
+                            raw: match[0],
+                            text: match[1].trim()
+                        }
+                    }
+                    return false
+                },
+                codespan(src) {
+                    const match = src.match(/^\$([^\$\n]+?)\$/)
+                    if (match) {
+                        return {
+                            type: 'math',
+                            raw: match[0],
+                            text: match[1].trim()
+                        }
+                    }
+                    return false
+                }
+            },
+            extensions: [{
+                name: 'math',
+                level: 'inline',
+                renderer({ text }) {
+                    return katex.renderToString(text, { throwOnError: false })
+                }
+            }, {
+                name: 'math-block',
+                level: 'block',
+                renderer({ text }) {
+                    return katex.renderToString(text, { displayMode: true, throwOnError: false })
+                }
+            }],
             renderer: {
                 listitem(text, task, checked) {
                     if (task) {
