@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
 - No vendors or CDN, I bundled front-end dependencies to a single file.
 
