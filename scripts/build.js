@@ -25,7 +25,7 @@ let timeStart = performance.now();
   let src2 = path.resolve("node_modules/@highlightjs/cdn-assets/styles/github-dark.min.css");
   let css1 = fs.readFileSync(src1, "utf8");
   let css2 = fs.readFileSync(src2, "utf8");
-  let css = css1 + '@media(prefers-color-scheme:dark){' + css2 + '}';
+  let css = css1 + "@media(prefers-color-scheme:dark){" + css2 + "}";
   fs.writeFileSync("./src/temp/hljs.css", css);
 }
 
@@ -38,6 +38,7 @@ let js = esbuild.build({
   format: "esm",
   target: "chrome86", // cent browser
   outfile: "./index.js",
+  metafile: true,
 });
 
 let css = esbuild.build({
@@ -49,6 +50,7 @@ let css = esbuild.build({
     ".woff2": "dataurl",
   },
   outfile: "./style.css",
+  metafile: true,
 });
 
 let bin = esbuild.build({
@@ -61,6 +63,7 @@ let bin = esbuild.build({
   format: "esm",
   target: "node16.15.1", // LTS
   outfile: "./bin.js",
+  metafile: true,
 });
 
 await Promise.allSettled([bin, js, css]).catch(() => process.exit(1));
@@ -84,3 +87,12 @@ file_with_size.forEach(([file, size, unit]) => {
 });
 console.log();
 console.log(`Finished in ${((elapsed * 100) | 0) / 100}ms.`);
+
+let files = await Promise.all([bin, js, css]).then(r => r.map(e => e.metafile));
+let merged = {};
+for (let { inputs, outputs } of files) {
+  merged.inputs = { ...inputs, ...merged.inputs };
+  merged.outputs = { ...outputs, ...merged.outputs };
+}
+let analytics = await esbuild.analyzeMetafile(merged, { color: false });
+console.log(analytics);
