@@ -1,14 +1,16 @@
 # Changelog
 
+## 0.2.1
+
+- Fixed missing highlight.js styles.
+
 ## 0.2.0
 
 - No vendors or CDN, I bundled front-end dependencies to a single file.
 
-  Due to the temporary down of jsdelivr in China, I have to do this.
-
 - Added support for KaTeX by <code>$ E = mc^2 $</code> and <code>$$ block mode $$</code>.
 
-  > Note: You can also use mermaid.js by <code>```mermaid</code>!
+  > Note: You can also use mermaid.js by <code>\`\`\`mermaid</code>!
 
 - Added support for multiple files (e.g. navigate to another markdown file through links).
 

@@ -39,8 +39,8 @@ source.onmessage = function on_init(ev) {
 const template = document.createElement("template");
 async function on_update(ev) {
   const data = JSON.parse(ev.data);
-  // 0 | 1: reload
-  if (data === 0 || data === 1) {
+  // 0: server restarted 2: read file error
+  if (typeof data === "number") {
     location.reload();
     return;
   }
@@ -79,7 +79,7 @@ function postprocess() {
   const maybe_title = document.querySelector("h1, h2");
   document.title = maybe_title ? maybe_title.textContent : "Untitled";
 
-  // Refresh KateX.
+  // Refresh KaTeX.
   renderMathInElement(body, {
     delimiters: [
       { left: "$$", right: "$$", display: true },

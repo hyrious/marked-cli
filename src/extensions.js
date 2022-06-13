@@ -1,5 +1,4 @@
 import { marked } from "marked";
-import katex from "katex";
 import Slugger from "github-slugger";
 
 /** @typedef {marked.TokenizerExtension | marked.RendererExtension} Extension */

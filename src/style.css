@@ -1,4 +1,5 @@
 @import "@hyrious/github-markdown-css";
+@import "./temp/hljs.css";
 @import "./temp/katex.css";
 
 body {

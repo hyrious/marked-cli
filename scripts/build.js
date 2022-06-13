@@ -19,6 +19,16 @@ let timeStart = performance.now();
   fs.writeFileSync("./src/temp/katex.css", css);
 }
 
+// Build hljs styles.
+{
+  let src1 = path.resolve("node_modules/@highlightjs/cdn-assets/styles/github.min.css");
+  let src2 = path.resolve("node_modules/@highlightjs/cdn-assets/styles/github-dark.min.css");
+  let css1 = fs.readFileSync(src1, "utf8");
+  let css2 = fs.readFileSync(src2, "utf8");
+  let css = css1 + '@media(prefers-color-scheme:dark){' + css2 + '}';
+  fs.writeFileSync("./src/temp/hljs.css", css);
+}
+
 let js = esbuild.build({
   entryPoints: ["./src/index.js"],
   bundle: true,

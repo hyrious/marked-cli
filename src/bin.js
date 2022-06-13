@@ -33,7 +33,7 @@ const server = http.createServer((req, res) => {
     }
     if (path) {
       path = path.slice(1);
-      res.on("close", watch(path, send_update.bind(null, res, path)));
+      res.once("close", watch(path, send_update.bind(null, res, path)));
       res.writeHead(200, { "content-type": "text/event-stream" });
       res.write(`data: 0\n\n`);
       // Send first update.
@@ -85,8 +85,13 @@ function create_destroy(server) {
 }
 
 function send_update(res, path) {
-  let content = fs.readFileSync(path, "utf8");
-  res.write(`data: ${JSON.stringify(content)}\n\n`);
+  try {
+    let content = fs.readFileSync(path, "utf8");
+    res.write(`data: ${JSON.stringify(content)}\n\n`);
+  } catch {
+    // In case of file being deleted, do force reload.
+    res.write(`data: 2\n\n`);
+  }
 }
 
 let guess_cache = new Map();
