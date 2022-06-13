@@ -1,0 +1,10 @@
+@import "@hyrious/github-markdown-css";
+@import "./temp/katex.css";
+
+body {
+  transition: opacity 0.2s;
+}
+
+body.loading {
+  opacity: 0.5;
+}

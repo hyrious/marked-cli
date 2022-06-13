@@ -1,16 +1,22 @@
 {
   "name": "@hyrious/marked-cli",
   "version": "0.1.9",
-  "description": "Preview markdown file with marked.",
-  "bin": "bin.mjs",
+  "description": "Preview markdown file with marked.js",
+  "main": "main.js",
+  "bin": "bin.js",
+  "type": "module",
   "files": [
-    "bin.mjs",
+    "bin.js",
+    "main.js",
     "index.js",
+    "style.css",
     "index.html",
-    "vendors"
+    "src"
   ],
   "scripts": {
-    "test": "node bin.mjs README.md"
+    "dev": "node scripts/dev.js",
+    "build": "node scripts/build.js",
+    "test": "node bin.js"
   },
   "keywords": [
     "markdown",
@@ -18,5 +24,16 @@
   ],
   "repository": "hyrious/marked-cli",
   "author": "hyrious <hyrious@outlook.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@highlightjs/cdn-assets": "^11.5.1",
+    "@hyrious/github-markdown-css": "^0.1.1",
+    "esbuild": "^0.14.43",
+    "github-slugger": "^1.4.0",
+    "katex": "^0.16.0",
+    "marked": "^4.0.16",
+    "mermaid": "^9.1.1",
+    "mrmime": "^1.0.1",
+    "pretty-bytes": "^6.0.0"
+  }
 }
