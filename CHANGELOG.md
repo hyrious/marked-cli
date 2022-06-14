@@ -5,6 +5,7 @@
 - Center mermaid diagrams.
 - Make mermaid diagrams follow system theme change.
 - Added octicon links.
+- Support changing root directory.
 
 ## 0.2.3
 

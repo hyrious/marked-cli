@@ -33,9 +33,7 @@ dark.addEventListener("change", ev => {
 const body = document.body;
 const __END__ = document.getElementById("__END__");
 
-const source = new EventSource(
-  "/@/source?" + new URLSearchParams({ path: location.pathname }).toString()
-);
+const source = new EventSource("/@/source?" + new URLSearchParams({ path: location.pathname }));
 source.onmessage = function on_init(ev) {
   const data = JSON.parse(ev.data);
   if (data === 0) {
@@ -58,7 +56,7 @@ async function on_update(ev) {
   // string: markdown content
   body.classList.add("loading");
 
-  if (search.get("github")) {
+  if (search.has("github")) {
     template.innerHTML = await fetch("https://api.github.com/markdown", {
       method: "POST",
       headers: { accept: "application/vnd.github.v3+json" },
