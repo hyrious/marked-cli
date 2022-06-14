@@ -9,3 +9,7 @@ body {
 body.loading {
   opacity: 0.5;
 }
+
+.mermaid {
+  text-align: center;
+}
