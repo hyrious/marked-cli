@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import { htmlEscape } from "escape-goat";
 import Slugger from "github-slugger";
 
 /** @typedef {marked.TokenizerExtension | marked.RendererExtension} Extension */
@@ -37,7 +38,7 @@ export let renderer = {
   // mermaid
   code(code, lang) {
     if (lang === "mermaid") {
-      return '<div class="mermaid">' + code + "</div>";
+      return '<div class="mermaid">' + htmlEscape(code) + "</div>";
     }
     return false;
   },

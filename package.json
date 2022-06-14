@@ -29,6 +29,7 @@
     "@highlightjs/cdn-assets": "^11.5.1",
     "@hyrious/github-markdown-css": "^0.1.1",
     "esbuild": "^0.14.43",
+    "escape-goat": "^4.0.0",
     "github-slugger": "^1.4.0",
     "katex": "^0.16.0",
     "marked": "^4.0.16",

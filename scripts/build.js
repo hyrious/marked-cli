@@ -3,6 +3,8 @@ import path from "node:path";
 import prettyBytes from "pretty-bytes";
 import esbuild from "esbuild";
 
+let dev = process.env.NODE_ENV === "development";
+
 let timeStart = performance.now();
 
 // Bundle KaTeX Fonts.
@@ -32,7 +34,7 @@ let timeStart = performance.now();
 let js = esbuild.build({
   entryPoints: ["./src/index.js"],
   bundle: true,
-  minify: true,
+  minify: !dev,
   mangleProps: /_$/,
   reserveProps: /^__.*__$/,
   format: "esm",
@@ -44,7 +46,7 @@ let js = esbuild.build({
 let css = esbuild.build({
   entryPoints: ["./src/style.css"],
   bundle: true,
-  minify: true,
+  minify: !dev,
   target: "chrome86",
   loader: {
     ".woff2": "dataurl",
@@ -56,7 +58,7 @@ let css = esbuild.build({
 let bin = esbuild.build({
   entryPoints: ["./src/bin.js"],
   bundle: true,
-  minify: true,
+  minify: !dev,
   mangleProps: /_$/,
   reserveProps: /^__.*__$/,
   platform: "node",

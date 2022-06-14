@@ -16,7 +16,7 @@ function quit() {
 }
 
 function refresh() {
-  cp.spawnSync("node", ["scripts/build.js"]);
+  cp.spawnSync("node", ["scripts/build.js"], { env: { ...process.env, NODE_ENV: "development" } });
   console.log(`rebuilt at ${new Date().toLocaleTimeString()}`);
   child && child.kill();
   child = cp.spawn("node", ["bin.js"], { stdio: "inherit" });
