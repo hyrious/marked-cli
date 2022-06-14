@@ -10,12 +10,14 @@ const indexCSS = new URL("style.css", import.meta.url);
 
 const server = http.createServer((req, res) => {
   let url = new URL(req.url, `http://${req.headers.host}`);
-  // /, /index.html, /README.md are redirect to the indexHTML
-  if (["/", "/index.html"].includes(url.pathname)) {
+
+  // /, /index.html -> indexHTML
+  if (["/", "/index.html"].includes(url.pathname) || url.pathname === "/@/index.html") {
     res.writeHead(200, { "content-type": "text/html" });
     res.end(fs.readFileSync(indexHTML, "utf8"));
   }
-  // Use our style.css and client (index.js)
+
+  // Built-in assets.
   else if (url.pathname === "/@/style.css") {
     res.writeHead(200, { "content-type": "text/css" });
     res.end(fs.readFileSync(indexCSS, "utf8"));
@@ -23,16 +25,14 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { "content-type": "text/javascript" });
     res.end(fs.readFileSync(indexJS, "utf8"));
   }
+
   // Here comes the interesting part, we watch the file from event sources
   // by reading the "path" param of the url.
   // When the event source is closed, we also close the file watch if needed.
   else if (url.pathname === "/@/source") {
-    let path = url.searchParams.get("path");
-    if (typeof path !== "string" || !path.endsWith(".md")) {
-      path = guess_index_markdown(path);
-    }
-    if (path) {
-      path = path.slice(1);
+    // try resolving markdown file
+    let path = resolve(url.searchParams.get("path") || "/");
+    if (path.endsWith(".md")) {
       res.once("close", watch(path, send_update.bind(null, res, path)));
       res.writeHead(200, { "content-type": "text/event-stream" });
       res.write(`data: 0\n\n`);
@@ -42,16 +42,18 @@ const server = http.createServer((req, res) => {
       res.statusCode = 404;
       res.end();
     }
-  } else {
-    let path = url.pathname.slice(1);
-    if (fs.existsSync(path) && fs.statSync(path).isFile()) {
-      if (path.endsWith(".md")) {
-        res.writeHead(200, { "content-type": "text/html" });
-        res.end(fs.readFileSync(indexHTML, "utf8"));
-      } else {
-        res.writeHead(200, { "content-type": lookup(path) || "text/plain" });
-        fs.createReadStream(path).pipe(res, { end: true });
-      }
+  }
+
+  // /path.md -> /path.md
+  // /path    -> /path/README.md
+  else {
+    let path = resolve(url.pathname);
+    if (path && path.endsWith(".md")) {
+      res.writeHead(200, { "content-type": "text/html" });
+      res.end(fs.readFileSync(indexHTML, "utf8"));
+    } else if (path) {
+      res.writeHead(200, { "content-type": lookup(path) || "text/plain" });
+      fs.createReadStream(path).pipe(res, { end: true });
     } else {
       res.statusCode = 404;
       res.end();
@@ -94,15 +96,25 @@ function send_update(res, path) {
   }
 }
 
-let guess_cache = new Map();
-function guess_index_markdown(path) {
-  if (guess_cache.has(path)) {
-    return guess_cache.get(path);
+// This function will be called at least twice for each markdown file.
+// I don't care the performance :)
+function resolve(path) {
+  path = path.replace(/^\//, "");
+  if (path.startsWith("@")) return null;
+  path = path.replace(/\/$/, "");
+
+  // exact match
+  if (path) {
+    const exist = fs.existsSync(path);
+    if (exist && fs.statSync(path).isFile()) return path;
+    // is folder
+    if (exist) return resolve(path + "/README.md");
   }
-  // Only guess README.md at root folder.
-  if (fs.existsSync("README.md")) {
-    guess_cache.set(path, "/README.md");
-    return "/README.md";
+
+  // no path, search for README.md in root folder
+  else if (fs.existsSync("README.md")) {
+    return "README.md";
   }
-  // Otherwise, send 404.
+
+  return null;
 }

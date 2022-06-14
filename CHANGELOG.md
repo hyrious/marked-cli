@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Refactored the resolver so that it can find `/path/README.md` in `/path`.
+
 ## 0.2.1
 
 - Fixed missing highlight.js styles.
