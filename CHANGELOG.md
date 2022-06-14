@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.4
 
 - Center mermaid diagrams.
 - Make mermaid diagrams follow system theme change.
