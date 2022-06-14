@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Center mermaid diagrams.
+- Make mermaid diagrams follow system theme change.
+- Added octicon links.
+
 ## 0.2.3
 
 - Added `--help` and `--version` flags.

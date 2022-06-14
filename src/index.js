@@ -21,6 +21,14 @@ marked.use({ renderer });
 
 const dark = matchMedia("(prefers-color-scheme: dark)");
 mermaid.initialize({ startOnLoad: false, theme: dark.matches ? "dark" : "default" });
+dark.addEventListener("change", ev => {
+  mermaid.initialize({ startOnLoad: false, theme: ev.matches ? "dark" : "default" });
+  body.querySelectorAll(".mermaid").forEach((el, i) => {
+    mermaid.mermaidAPI.render(`mermaid-${i}`, (el.__mermaid ||= el.textContent), svg => {
+      el.innerHTML = svg;
+    });
+  });
+});
 
 const body = document.body;
 const __END__ = document.getElementById("__END__");
@@ -90,7 +98,7 @@ function postprocess() {
 
   // Refresh mermaid diagrams.
   body.querySelectorAll(".mermaid").forEach((el, i) =>
-    mermaid.mermaidAPI.render(`mermaid-${i}`, el.textContent, svg => {
+    mermaid.mermaidAPI.render(`mermaid-${i}`, (el.__mermaid ||= el.textContent), svg => {
       el.innerHTML = svg;
     })
   );
