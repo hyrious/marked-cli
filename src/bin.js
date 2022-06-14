@@ -24,9 +24,13 @@ if (["--help", "-h"].includes(arg1)) {
 
 // Get base dir from arg1.
 let cwd = process.cwd();
+let index_file = "README.md";
 if (arg1 && fs.existsSync(arg1)) {
   if (fs.statSync(arg1).isDirectory()) cwd = arg1;
-  else cwd = path.dirname(arg1);
+  else {
+    cwd = path.dirname(arg1);
+    index_file = path.basename(arg1);
+  }
 }
 
 const indexHTML = new URL("index.html", import.meta.url);
@@ -146,8 +150,8 @@ function resolve(file) {
   }
 
   // no path, search for README.md in root folder
-  else if (fs.existsSync(path.join(cwd, "README.md"))) {
-    return "README.md";
+  else if (fs.existsSync(path.join(cwd, index_file))) {
+    return index_file;
   }
 
   return null;

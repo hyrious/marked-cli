@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Fixed to escape html in mermaid.
+- Support changing index file in root directory.
+
 ## 0.2.4
 
 - Center mermaid diagrams.
