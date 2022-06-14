@@ -3,6 +3,23 @@ import fs from "fs";
 import http from "http";
 import { lookup } from "mrmime";
 import { unwatch_all, watch } from "./watch";
+import { name, version } from "../package.json";
+
+let flag = process.argv[2];
+if (["--version", "-v"].includes(flag)) {
+  console.log(`${name}, ${version}`);
+  process.exit(0);
+}
+if (["--help", "-h"].includes(flag)) {
+  console.log(`
+  Description
+    Preview markdown files, update the browser on change.
+
+  Usage
+    $ marked-cli
+`);
+  process.exit(0);
+}
 
 const indexHTML = new URL("index.html", import.meta.url);
 const indexJS = new URL("index.js", import.meta.url);
