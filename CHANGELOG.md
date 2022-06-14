@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.5
 
 - Fixed to escape html in mermaid.
 - Support changing index file in root directory.
