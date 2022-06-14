@@ -74,8 +74,16 @@ const server = http.createServer((req, res) => {
   else {
     let path = resolve(decodeURIComponent(url.pathname));
     if (path && path.endsWith(".md")) {
-      res.writeHead(200, { "content-type": "text/html" });
-      res.end(fs.readFileSync(indexHTML, "utf8"));
+      // If in the browser it is not point to exactly the markdown file,
+      // tell the browser to redirect to the file correctly.
+      // Otherwise relative links in that file will be broken.
+      if (!url.pathname.endsWith(".md")) {
+        res.writeHead(302, { location: "/" + path });
+        res.end();
+      } else {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end(fs.readFileSync(indexHTML, "utf8"));
+      }
     } else if (path) {
       res.writeHead(200, { "content-type": lookup(path) || "text/plain" });
       fs.createReadStream(path).pipe(res, { end: true });

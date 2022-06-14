@@ -6,6 +6,7 @@
 - Make mermaid diagrams follow system theme change.
 - Added octicon links.
 - Support changing root directory.
+- Redirect to the markdown file in subpath.
 
 ## 0.2.3
 
