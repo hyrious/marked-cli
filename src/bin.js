@@ -48,8 +48,8 @@ const server = http.createServer((req, res) => {
   // When the event source is closed, we also close the file watch if needed.
   else if (url.pathname === "/@/source") {
     // try resolving markdown file
-    let path = resolve(url.searchParams.get("path") || "/");
-    if (path.endsWith(".md")) {
+    let path = resolve(decodeURIComponent(url.searchParams.get("path") || "/"));
+    if (path && path.endsWith(".md")) {
       res.once("close", watch(path, send_update.bind(null, res, path)));
       res.writeHead(200, { "content-type": "text/event-stream" });
       res.write(`data: 0\n\n`);
@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
   // /path.md -> /path.md
   // /path    -> /path/README.md
   else {
-    let path = resolve(url.pathname);
+    let path = resolve(decodeURIComponent(url.pathname));
     if (path && path.endsWith(".md")) {
       res.writeHead(200, { "content-type": "text/html" });
       res.end(fs.readFileSync(indexHTML, "utf8"));

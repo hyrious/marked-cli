@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.3
+
+- Added `--help` and `--version` flags.
+- Fixed file name with spaces and other special characters.
+
 ## 0.2.2
 
 - Refactored the resolver so that it can find `/path/README.md` in `/path`.
