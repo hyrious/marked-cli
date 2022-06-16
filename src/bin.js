@@ -5,6 +5,7 @@ import http from "http";
 import { lookup } from "mrmime";
 import { unwatch_all, watch } from "./watch";
 import { name, version } from "../package.json";
+import { repo } from "./git";
 
 let arg1 = process.argv[2];
 if (["--version", "-v"].includes(arg1)) {
@@ -32,6 +33,8 @@ if (arg1 && fs.existsSync(arg1)) {
     index_file = path.basename(arg1);
   }
 }
+
+let current_repo = repo(cwd);
 
 const indexHTML = new URL("index.html", import.meta.url);
 const indexJS = new URL("index.js", import.meta.url);
@@ -61,6 +64,9 @@ const server = http.createServer((req, res) => {
   else if (url.pathname === "/@/source") {
     res.writeHead(200, { "content-type": "text/event-stream" });
     res.write(`data: 0\n\n`);
+    if (current_repo) {
+      res.write(`data: ${JSON.stringify({ repo: current_repo })}\n\n`);
+    }
     // try resolving markdown file
     let file = resolve(decodeURIComponent(url.searchParams.get("path") || "/"));
     if (file && file.endsWith(".md")) {

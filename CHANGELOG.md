@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Support auto-link `#id` to issue.
+
 ## 0.2.5
 
 - Fixed to escape html in mermaid.

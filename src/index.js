@@ -4,7 +4,7 @@ import mermaid from "mermaid";
 import katex from "katex";
 import renderMathInElement from "katex/contrib/auto-render";
 import Slugger from "github-slugger";
-import { renderer, slugger } from "./extensions";
+import { renderer, set_repo, slugger } from "./extensions";
 
 const search = new URLSearchParams(location.search);
 
@@ -49,6 +49,13 @@ async function on_update(ev) {
   if (typeof data === "number") {
     location.reload();
     return;
+  }
+
+  if (typeof data === "object" && data !== null) {
+    if (data.repo) {
+      set_repo(data.repo);
+      return;
+    }
   }
 
   if (typeof data !== "string") return;

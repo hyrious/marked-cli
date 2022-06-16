@@ -4,6 +4,12 @@ import Slugger from "github-slugger";
 
 /** @typedef {marked.TokenizerExtension | marked.RendererExtension} Extension */
 
+let repo = "";
+
+export function set_repo(current_repo) {
+  repo = current_repo;
+}
+
 export let slugger = new Slugger();
 
 /** @type {marked.RendererObject} */
@@ -39,6 +45,16 @@ export let renderer = {
   code(code, lang) {
     if (lang === "mermaid") {
       return '<div class="mermaid">' + htmlEscape(code) + "</div>";
+    }
+    return false;
+  },
+  // #issue
+  text(text) {
+    if (repo) {
+      return text.replace(
+        /#(\d+)/g,
+        (_, id) => `<a href="https://github.com/${repo}/issues/${id}">#${id}</a>`
+      );
     }
     return false;
   },
