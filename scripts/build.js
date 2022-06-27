@@ -115,6 +115,8 @@ console.log(analytics);
   });
   let js = result.outputFiles[0].text;
   let css = fs.readFileSync("./style.css", "utf8");
+  // Hack around vscode injected styles.
+  css += `blockquote { --vscode-textBlockQuote-background: none; }`;
   let html = fs.readFileSync("./index.html", "utf8");
   // Use () => newString to prevent symbols like `$&` be interpreted
   html = html.replace('<link rel="stylesheet" href="/@/style.css">', () => `<style>${css}</style>`);

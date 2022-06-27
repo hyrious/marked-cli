@@ -31,7 +31,7 @@
 //   return this_
 // }
 //
-// vscode.command.registerCommand('vscode-marked.render', () => {
+// vscode.commands.registerCommand('vscode-marked.render', () => {
 //   let doc = vscode.window.activeTextEditor?.document
 //   if (!doc) return
 //   let p = panels.find(p => p.doc === doc)
@@ -49,7 +49,7 @@
 
 let vscode = acquireVsCodeApi();
 let current;
-window.addEventListener("message", (event) => {
+window.addEventListener("message", event => {
   current && current.onmessage(event);
   // Remember last render argument.
   if (typeof event.data === "string") {

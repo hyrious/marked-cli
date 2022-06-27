@@ -78,6 +78,12 @@ async function on_update(ev) {
     body.removeChild(body.firstChild);
   }
 
+  // Ensure there's no ghost element after __END__.
+  // Note: mermaid will render error graph to the end of document.
+  while (body.lastChild !== __END__) {
+    body.removeChild(body.lastChild);
+  }
+
   body.insertBefore(template.content, __END__);
   requestAnimationFrame(postprocess);
 }
