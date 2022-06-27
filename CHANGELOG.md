@@ -3,6 +3,7 @@
 ## 0.2.7
 
 - Fixed an edge case where mermaid error still exist.
+- Support footnote.
 
 ## 0.2.6
 

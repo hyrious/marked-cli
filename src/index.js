@@ -4,7 +4,7 @@ import mermaid from "mermaid";
 import katex from "katex";
 import renderMathInElement from "katex/contrib/auto-render";
 import Slugger from "github-slugger";
-import { renderer, set_repo, slugger, walkTokens } from "./extensions";
+import { footnoteList, footnote, renderer, set_repo, slugger, walkTokens } from "./extensions";
 
 const search = new URLSearchParams(location.search);
 
@@ -17,7 +17,7 @@ marked.setOptions({
   },
 });
 
-marked.use({ renderer, walkTokens });
+marked.use({ extensions: [footnoteList, footnote], renderer, walkTokens });
 
 const dark = matchMedia("(prefers-color-scheme: dark)");
 mermaid.initialize({ startOnLoad: false, theme: dark.matches ? "dark" : "default" });

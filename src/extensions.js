@@ -2,7 +2,7 @@ import { marked } from "marked";
 import { htmlEscape } from "escape-goat";
 import Slugger from "github-slugger";
 
-/** @typedef {marked.TokenizerExtension | marked.RendererExtension} Extension */
+/** @typedef {marked.TokenizerExtension | marked.RendererExtension | (marked.TokenizerExtension & marked.RendererExtension)} Extension */
 
 let repo = "";
 
@@ -79,4 +79,75 @@ export let walkTokens = token => {
       }
     });
   }
+};
+
+/** @type {Extension} */
+export let footnoteList = {
+  name: "footnoteList",
+  level: "block",
+  start(src) {
+    return src.match(/^\[\^\d+\]:/)?.index;
+  },
+  tokenizer(src, tokens) {
+    const match = /^(?:\[\^(\d+)\]:[^\n]*(?:\n|$))+/.exec(src);
+    if (match) {
+      const token = {
+        type: "footnoteList",
+        raw: match[0],
+        text: match[0].trim(),
+        tokens: [],
+      };
+      this.lexer.inline(token.text, token.tokens);
+      return token;
+    }
+  },
+  renderer(token) {
+    return (
+      '<section class="footnotes"><ol dir="auto">' +
+      this.parser.parseInline(token.tokens) +
+      "</ol></section>"
+    );
+  },
+};
+
+/** @type {Extension} */
+export let footnote = {
+  name: "footnote",
+  level: "inline",
+  start(src) {
+    return src.match(/\[\^\d+\]/)?.index;
+  },
+  tokenizer(src, tokens) {
+    const matchList = /^\[\^(\d+)\]:([^\n]*)(?:\n|$)/.exec(src);
+    if (matchList) {
+      return {
+        type: "footnote",
+        raw: matchList[0],
+        id: parseInt(matchList[1]),
+        tokens: this.lexer.inlineTokens(matchList[2].trim()),
+        def: true,
+      };
+    }
+    const matchInline = /^\[\^(\d+)\]/.exec(src);
+    if (matchInline) {
+      return {
+        type: "footnote",
+        raw: matchInline[0],
+        id: parseInt(matchInline[1]),
+        tokens: [],
+        def: false,
+      };
+    }
+  },
+  renderer(token) {
+    if (!token.def) {
+      return `<sup><a href="#user-content-fn-${token.id}" data-footnote-ref="" id="user-content-fnref-${token.id}">${token.id}</a></sup>`;
+    }
+    return (
+      `<li id="user-content-fn-${token.id}"><p dir="auto">` +
+      this.parser.parseInline(token.tokens) +
+      ` <a href="#user-content-fnref-${token.id}" class="data-footnote-backref" aria-label="Back to content">` +
+      '<g-emoji class="g-emoji" alias="leftwards_arrow_with_hook" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/21a9.png">↩</g-emoji></a></p></li>'
+    );
+  },
 };

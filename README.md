@@ -27,7 +27,7 @@ This package has 2 purposes:
 
 ### Todo
 
-- [ ] Footnote.
+- [x] Footnote.
 - [ ] Front-matter.
 - [ ] Emoji.
 
