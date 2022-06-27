@@ -2,6 +2,8 @@
 
 A simple script to preview local markdown file with hot reload.
 
+> Want to use it in VS Code? Check out [this extension](https://github.com/hyrious/vscode-marked)!
+
 ## Usage
 
     npx @hyrious/marked-cli README.md
