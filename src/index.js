@@ -13,6 +13,7 @@ import {
   slugger,
   walkTokens,
 } from "./extensions";
+import { matter, stringify } from "./matter";
 
 const search = new URLSearchParams(location.search);
 
@@ -79,7 +80,8 @@ async function on_update(ev) {
     }).then(r => r.text());
   } else {
     slugger.reset();
-    template.innerHTML = marked.parse(data);
+    let [frontmatter, content] = matter(data);
+    template.innerHTML = stringify(frontmatter) + "\n" + marked.parse(content);
   }
 
   while (body.firstChild !== __END__) {

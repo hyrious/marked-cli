@@ -31,6 +31,7 @@
     "esbuild": "^0.14.47",
     "escape-goat": "^4.0.0",
     "github-slugger": "^1.4.0",
+    "js-yaml": "^4.1.0",
     "katex": "^0.16.0",
     "markdown-it-emoji": "^2.0.2",
     "marked": "^4.0.17",
