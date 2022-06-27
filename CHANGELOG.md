@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.7
+
+- Fixed an edge case where mermaid error still exist.
+
 ## 0.2.6
 
 - Support auto-link `#id` to issue.
