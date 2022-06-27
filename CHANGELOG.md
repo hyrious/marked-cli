@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.6
 
 - Support auto-link `#id` to issue.
 - Transform `> **Note**` like GitHub does.
