@@ -29,7 +29,7 @@ This package has 2 purposes:
 
 - [x] Footnote.
 - [ ] Front-matter.
-- [ ] Emoji.
+- [x] Emoji.
 
 ## License
 

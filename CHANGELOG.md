@@ -4,6 +4,7 @@
 
 - Fixed an edge case where mermaid error still exist.
 - Support footnote.
+- Support emoji.
 
 ## 0.2.6
 

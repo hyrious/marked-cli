@@ -32,6 +32,7 @@
     "escape-goat": "^4.0.0",
     "github-slugger": "^1.4.0",
     "katex": "^0.16.0",
+    "markdown-it-emoji": "^2.0.2",
     "marked": "^4.0.17",
     "mermaid": "^9.1.2",
     "mrmime": "^1.0.1",

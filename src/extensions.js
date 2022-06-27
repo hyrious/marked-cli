@@ -81,6 +81,7 @@ export let walkTokens = token => {
   }
 };
 
+// Footnote[^1]
 /** @type {Extension} */
 export let footnoteList = {
   name: "footnoteList",
@@ -149,5 +150,31 @@ export let footnote = {
       ` <a href="#user-content-fnref-${token.id}" class="data-footnote-backref" aria-label="Back to content">` +
       '<g-emoji class="g-emoji" alias="leftwards_arrow_with_hook" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/21a9.png">↩</g-emoji></a></p></li>'
     );
+  },
+};
+
+// :emoji:
+import full from "markdown-it-emoji/lib/data/full.json";
+
+/** @type {Extension} */
+export let emoji = {
+  name: "emoji",
+  level: "inline",
+  start(src) {
+    return src.match(/:[a-zA-Z0-9_\-\+]+:/)?.index;
+  },
+  tokenizer(src, tokens) {
+    const match = /^:([a-zA-Z0-9_\-\+]+):/.exec(src);
+    if (match && match[1] in full) {
+      return {
+        type: "emoji",
+        raw: match[0],
+        text: full[match[1]],
+      };
+    }
+  },
+  renderer(token) {
+    const codePoint = token.text.codePointAt(0).toString(16);
+    return `<g-emoji class="g-emoji" alias="${token.text}" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/${codePoint}.png">${token.text}</g-emoji>`;
   },
 };
