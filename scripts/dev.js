@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import cp from "node:child_process";
 
-/** @type {import('node:child_process').ChildProcess} */
+/** @type {cp.ChildProcess} */
 let child = null;
 
 let watcher = fs.watch("./src", debounce(refresh));

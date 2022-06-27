@@ -51,11 +51,32 @@ export let renderer = {
   // #issue
   text(text) {
     if (repo) {
+      // Ensure not replacing "&#39;".
+      // Warn: negative lookbehind (?<!xxx) does not work on safari
       return text.replace(
-        /#(\d+)/g,
+        /(?<!&)#(\d+)/g,
         (_, id) => `<a href="https://github.com/${repo}/issues/${id}">#${id}</a>`
       );
     }
     return false;
   },
+};
+
+/** @type {marked.MarkedOptions["walkTokens"]} */
+export let walkTokens = token => {
+  // Replace the first **Note** inside a blockquote element.
+  if (token.type === "blockquote") {
+    /** @type {marked.Token} */
+    let first;
+    token.tokens.forEach(t => {
+      if (t.type === "paragraph") {
+        if ((first = t.tokens[0]) && first.type === "strong" && first.text === "Note") {
+          first.type = "html";
+          first.tokens = undefined;
+          first.text = first.raw =
+            '<span class="color-fg-accent"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg>Note</span>';
+        }
+      }
+    });
+  }
 };

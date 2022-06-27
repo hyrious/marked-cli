@@ -13,3 +13,12 @@ body.loading {
 .mermaid {
   text-align: center;
 }
+
+/* styles for **Note** */
+.color-fg-accent {
+  color: var(--color-accent-fg) !important;
+}
+
+.mr-2 {
+  margin-right: 8px !important;
+}

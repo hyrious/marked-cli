@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Support auto-link `#id` to issue.
+- Transform `> **Note**` like GitHub does.
 
 ## 0.2.5
 
