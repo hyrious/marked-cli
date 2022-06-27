@@ -13,7 +13,6 @@ fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2));
 
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 cp.spawnSync(npm, ["run", "build"], { stdio: "inherit" });
-const vsce = process.platform === "win32" ? "vsce.cmd" : "vsce";
-cp.spawnSync(vsce, ["publish", "--tag", "vscode"], { stdio: "inherit" });
+cp.spawnSync(npm, ["publish", "--tag", "vscode"], { stdio: "inherit" });
 
 fs.writeFileSync("package.json", saved);
