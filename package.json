@@ -11,6 +11,7 @@
     "index.js",
     "style.css",
     "index.html",
+    "index.vscode.html",
     "src"
   ],
   "scripts": {

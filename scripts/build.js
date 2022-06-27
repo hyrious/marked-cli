@@ -98,3 +98,30 @@ for (let { inputs, outputs } of files) {
 }
 let analytics = await esbuild.analyzeMetafile(merged, { color: false });
 console.log(analytics);
+
+// Build index.vscode.html
+{
+  let result = await esbuild.build({
+    entryPoints: ["./src/index.js"],
+    bundle: true,
+    inject: ["./src/vscode-shim.js"],
+    minify: true,
+    mangleProps: /_$/,
+    reserveProps: /^__.*__$/,
+    format: "esm",
+    target: "chrome98", // current vscode version
+    outfile: "./index.vscode.js",
+    write: false,
+  });
+  let js = result.outputFiles[0].text;
+  let css = fs.readFileSync("./style.css", "utf8");
+  let html = fs.readFileSync("./index.html", "utf8");
+  // Use () => newString to prevent symbols like `$&` be interpreted
+  html = html.replace('<link rel="stylesheet" href="/@/style.css">', () => `<style>${css}</style>`);
+  html = html.replace(
+    '<script id="__END__" type="module" src="/@/index.js"></script>',
+    () => `<script id="__END__" type="module">${js}</script>`
+  );
+  fs.writeFileSync("index.vscode.html", html);
+  console.log("Built index.vscode.html", prettyBytes(html.length));
+}
