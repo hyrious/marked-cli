@@ -25,6 +25,12 @@ This package has 2 purposes:
 
 ### [Changelog](./CHANGELOG.md)
 
+### Todo
+
+- [ ] Footnote.
+- [ ] Front-matter.
+- [ ] Emoji.
+
 ## License
 
 MIT @ [hyrious](https://github.com/hyrious)
