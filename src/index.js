@@ -15,6 +15,8 @@ import {
 } from "./extensions";
 import { matter, stringify } from "./matter";
 
+function noop() {}
+
 const search = new URLSearchParams(location.search);
 
 Object.assign(window, { marked, hljs, mermaid, katex, Slugger, slugger });
@@ -51,6 +53,8 @@ source.onmessage = function on_init(ev) {
   }
 };
 
+let srcMap;
+let notifyTransformSrc = false;
 const template = document.createElement("template");
 async function on_update(ev) {
   const data = JSON.parse(ev.data);
@@ -64,6 +68,20 @@ async function on_update(ev) {
     if (data.repo) {
       set_repo(data.repo);
       return;
+    }
+    if (data.notifyTransformSrc) {
+      notifyTransformSrc = true;
+      return;
+    }
+    if (data.transformSrc && srcMap) {
+      let imgs;
+      data.transformSrc.forEach(([src, real]) => {
+        if ((imgs = srcMap.get(src))) {
+          imgs.forEach(img => {
+            img.src = real;
+          });
+        }
+      });
     }
   }
 
@@ -125,6 +143,20 @@ function postprocess() {
   );
 
   body.classList.remove("loading");
+
+  if (notifyTransformSrc) {
+    srcMap = new Map();
+    document.querySelectorAll("img").forEach(img => {
+      let src = img.getAttribute("src");
+      if (!src) return;
+      if (srcMap.has(src)) {
+        srcMap.get(src).add(img);
+      } else {
+        srcMap.set(src, new Set([img]));
+      }
+    });
+    (source._postMessage || noop)({ transformSrc: Array.from(srcMap.keys()) });
+  }
 }
 
 // Remove service workers registered by other debugging tools.
