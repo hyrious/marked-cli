@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Support <code>```math</code>, see https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions.
+
 ## 0.2.7
 
 - Fixed an edge case where mermaid error still exist.

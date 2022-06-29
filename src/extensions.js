@@ -41,10 +41,13 @@ export let renderer = {
     }
     return false;
   },
-  // mermaid
+  // mermaid, katex
   code(code, lang) {
     if (lang === "mermaid") {
       return '<div class="mermaid">' + htmlEscape(code) + "</div>";
+    }
+    if (lang === "math") {
+      return "<p>$$ " + htmlEscape(code) + " $$</p>";
     }
     return false;
   },
