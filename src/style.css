@@ -14,9 +14,28 @@ body.loading {
   text-align: center;
 }
 
+@media (prefers-color-scheme: dark) {
+  .markdown-body {
+    --color-accent-fg: #58a6ff;
+    --color-attention-fg: #d29922;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .markdown-body {
+    --color-accent-fg: #0969da;
+    --color-attention-fg: #9a6700;
+  }
+}
+
 /* styles for **Note** */
 .color-fg-accent {
   color: var(--color-accent-fg) !important;
+}
+
+/* styles for **Warning** */
+.color-fg-attention {
+  color: var(--color-attention-fg) !important;
 }
 
 .mr-2 {
