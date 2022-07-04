@@ -144,6 +144,13 @@ function postprocess() {
 
   body.classList.remove("loading");
 
+  try {
+    // Scroll to the target element if needed.
+    document.querySelector(location.hash)?.scrollIntoView({ behavior: "smooth" });
+  } catch {
+    // location.hash may be invalid.
+  }
+
   if (notifyTransformSrc) {
     srcMap = new Map();
     document.querySelectorAll("img").forEach(img => {
