@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.8
 
 - Support <code>```math</code>, see https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions.
 - Transform `> **Warning**` like GitHub does.
