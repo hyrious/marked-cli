@@ -53,6 +53,18 @@ source.onmessage = function on_init(ev) {
   }
 };
 
+let initialized = false;
+function init() {
+  if (initialized) return;
+  try {
+    // Scroll to the target element if needed.
+    document.querySelector(location.hash)?.scrollIntoView({ behavior: "smooth" });
+  } catch {
+    // location.hash may be invalid.
+  }
+  initialized = true;
+}
+
 let srcMap;
 let notifyTransformSrc = false;
 const template = document.createElement("template");
@@ -144,12 +156,7 @@ function postprocess() {
 
   body.classList.remove("loading");
 
-  try {
-    // Scroll to the target element if needed.
-    document.querySelector(location.hash)?.scrollIntoView({ behavior: "smooth" });
-  } catch {
-    // location.hash may be invalid.
-  }
+  init();
 
   if (notifyTransformSrc) {
     srcMap = new Map();
@@ -165,6 +172,36 @@ function postprocess() {
     (source._postMessage || noop)({ transformSrc: Array.from(srcMap.keys()) });
   }
 }
+
+let throttle = 0;
+function update_hash_() {
+  if (!throttle) throttle = setTimeout(update_hash, 300);
+}
+
+let pathhash = location.pathname + location.hash;
+function update_hash() {
+  throttle = 0;
+  let h2, h3, h4;
+  for (const h of document.querySelectorAll("h2, h3, h4")) {
+    if (h.getBoundingClientRect().top > 10) break;
+    if (h.tagName === "H2") {
+      h2 = h;
+      h3 = h4 = null;
+    } else if (h.tagName === "H3") {
+      h3 = h;
+      h4 = null;
+    } else {
+      h4 = h;
+    }
+  }
+  const h = h4 || h3 || h2;
+  pathhash = location.pathname + (h ? "#" + h.id : "");
+  if (location.pathname + location.hash !== pathhash) {
+    history.replaceState(null, "", pathhash);
+  }
+}
+
+addEventListener("scroll", update_hash_, { passive: true });
 
 // Remove service workers registered by other debugging tools.
 // `navigator.serviceWorker` is undefined in http://127.0.0.1 (insecure context).

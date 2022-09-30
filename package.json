@@ -28,14 +28,14 @@
   "devDependencies": {
     "@highlightjs/cdn-assets": "^11.6.0",
     "@hyrious/github-markdown-css": "^0.1.1",
-    "esbuild": "^0.15.1",
+    "esbuild": "^0.15.10",
     "escape-goat": "^4.0.0",
     "github-slugger": "^1.4.0",
     "js-yaml": "^4.1.0",
-    "katex": "^0.16.0",
+    "katex": "^0.16.2",
     "markdown-it-emoji": "^2.0.2",
-    "marked": "^4.0.18",
-    "mermaid": "^9.1.4",
+    "marked": "^4.1.0",
+    "mermaid": "^9.1.7",
     "mrmime": "^1.0.1",
     "pretty-bytes": "^6.0.0"
   }

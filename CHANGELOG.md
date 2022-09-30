@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.9
+
+- Changed auto scroll behavior, it only occurs once (on init) now.
+- Now when you scroll the page, the location.hash will be updated too.
+
 ## 0.2.8
 
 - Support <code>```math</code>, see https://github.blog/changelog/2022-06-28-fenced-block-syntax-for-mathematical-expressions.
