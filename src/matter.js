@@ -16,11 +16,7 @@ export function stringify(obj) {
     if (obj === null) return "";
 
     if (Array.isArray(obj)) {
-      return (
-        "<table><tbody><tr><td>" +
-        obj.map(stringify).join("</td><td>") +
-        "</td></tr></tbody></table>"
-      );
+      return "<table><tbody><tr><td>" + obj.map(stringify).join("</td><td>") + "</td></tr></tbody></table>";
     }
 
     let keys = Object.keys(obj);

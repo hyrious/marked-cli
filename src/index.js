@@ -1,18 +1,11 @@
 import { marked } from "marked";
+import linkify from "marked-linkify-it";
 import hljs from "@highlightjs/cdn-assets/es/highlight";
 import mermaid from "mermaid";
 import katex from "katex";
 import renderMathInElement from "katex/contrib/auto-render";
 import Slugger from "github-slugger";
-import {
-  footnoteList,
-  footnote,
-  emoji,
-  renderer,
-  set_repo,
-  slugger,
-  walkTokens,
-} from "./extensions";
+import { footnoteList, footnote, emoji, renderer, set_repo, slugger, walkTokens } from "./extensions";
 import { matter, stringify } from "./matter";
 
 function noop() {}
@@ -28,7 +21,7 @@ marked.setOptions({
   },
 });
 
-marked.use({ extensions: [footnoteList, footnote, emoji], renderer, walkTokens });
+marked.use(linkify(), { extensions: [footnoteList, footnote, emoji], renderer, walkTokens });
 
 const dark = matchMedia("(prefers-color-scheme: dark)");
 mermaid.initialize({ startOnLoad: false, theme: dark.matches ? "dark" : "default" });
@@ -151,7 +144,7 @@ function postprocess() {
   body.querySelectorAll(".mermaid").forEach((el, i) =>
     mermaid.mermaidAPI.render(`mermaid-${i}`, (el.__mermaid ||= el.textContent), svg => {
       el.innerHTML = svg;
-    })
+    }),
   );
 
   body.classList.remove("loading");

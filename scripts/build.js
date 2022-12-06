@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import tty from "node:tty";
 import prettyBytes from "pretty-bytes";
 import esbuild from "esbuild";
 
@@ -96,7 +97,7 @@ for (let { inputs, outputs } of files) {
   merged.inputs = { ...inputs, ...merged.inputs };
   merged.outputs = { ...outputs, ...merged.outputs };
 }
-let analytics = await esbuild.analyzeMetafile(merged, { color: false });
+let analytics = await esbuild.analyzeMetafile(merged, { color: tty.WriteStream.prototype.hasColors() });
 console.log(analytics);
 
 // Build index.vscode.html
@@ -122,7 +123,7 @@ console.log(analytics);
   html = html.replace('<link rel="stylesheet" href="/@/style.css">', () => `<style>${css}</style>`);
   html = html.replace(
     '<script id="__END__" type="module" src="/@/index.js"></script>',
-    () => `<script id="__END__" type="module">${js}</script>`
+    () => `<script id="__END__" type="module">${js}</script>`,
   );
   fs.writeFileSync("index.vscode.html", html);
   console.log("Built index.vscode.html", prettyBytes(html.length));

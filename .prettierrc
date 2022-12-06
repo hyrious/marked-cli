@@ -1,3 +1,7 @@
-printWidth: 100
-arrowParens: avoid
-endOfLine: auto
+{
+  "endOfLine": "auto",
+  "printWidth": 110,
+  "trailingComma": "all",
+  "quoteProps": "consistent",
+  "arrowParens": "avoid"
+}

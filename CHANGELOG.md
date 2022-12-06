@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.10
+
+- Fixed slugger (which renders heading id) not taking raw text into account.
+- Included `marked-linkify-it` plugin, this may not be consist with github.
+
 ## 0.2.9
 
 - Changed auto scroll behavior, it only occurs once (on init) now.
