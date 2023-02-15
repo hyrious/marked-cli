@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.11
+
+- Upgraded all dependencies.
+
 ## 0.2.10
 
 - Fixed slugger (which renders heading id) not taking raw text into account.
