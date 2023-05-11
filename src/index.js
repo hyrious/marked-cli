@@ -1,38 +1,52 @@
 import { marked } from "marked";
 import linkify from "marked-linkify-it";
+import { gfmHeadingId } from "marked-gfm-heading-id";
+import { markedHighlight } from "marked-highlight";
 import hljs from "@highlightjs/cdn-assets/es/highlight";
 import mermaid from "mermaid";
 import katex from "katex";
 import renderMathInElement from "katex/contrib/auto-render";
-import Slugger from "github-slugger";
-import { footnoteList, footnote, emoji, renderer, set_repo, slugger, walkTokens } from "./extensions";
+import { math, footnoteList, footnote, emoji, renderer, set_repo, hooks, walkTokens } from "./extensions";
 import { matter, stringify } from "./matter";
 
 function noop() {}
 
 const search = new URLSearchParams(location.search);
 
-Object.assign(window, { marked, hljs, mermaid, katex, Slugger, slugger });
+Object.assign(window, { marked, hljs, mermaid, katex });
 
-marked.setOptions({
-  highlight(code, lang) {
-    const language = hljs.getLanguage(lang) ? lang : "plaintext";
-    return hljs.highlight(code, { language }).value;
+marked.use(
+  markedHighlight({
+    langPrefix: "hljs language-",
+    highlight(code, lang) {
+      const language = hljs.getLanguage(lang) ? lang : "plaintext";
+      return hljs.highlight(code, { language }).value;
+    },
+  }),
+  gfmHeadingId(),
+  linkify(),
+  {
+    langPrefix: "language-",
+    mangle: false,
+    extensions: [math, footnoteList, footnote, emoji],
+    renderer,
+    hooks,
+    walkTokens,
   },
-});
-
-marked.use(linkify(), { extensions: [footnoteList, footnote, emoji], renderer, walkTokens });
+);
 
 const dark = matchMedia("(prefers-color-scheme: dark)");
 mermaid.initialize({ startOnLoad: false, theme: dark.matches ? "dark" : "default" });
-dark.addEventListener("change", ev => {
-  mermaid.initialize({ startOnLoad: false, theme: ev.matches ? "dark" : "default" });
-  body.querySelectorAll(".mermaid").forEach((el, i) => {
-    mermaid.mermaidAPI.render(`mermaid-${i}`, (el.__mermaid ||= el.textContent), svg => {
-      el.innerHTML = svg;
-    });
+
+function refresh_mermaid(ev) {
+  ev && mermaid.initialize({ startOnLoad: false, theme: ev.matches ? "dark" : "default" });
+  document.querySelectorAll(".mermaid").forEach(async (el, i) => {
+    const { svg } = await mermaid.render(`mermaid-${i}`, (el.__mermaid ||= el.textContent));
+    el.innerHTML = svg;
   });
-});
+}
+
+dark.addEventListener("change", refresh_mermaid);
 
 const body = document.body;
 const __END__ = document.getElementById("__END__");
@@ -102,7 +116,6 @@ async function on_update(ev) {
       body: JSON.stringify({ text: data, mode: "gfm" }),
     }).then(r => r.text());
   } else {
-    slugger.reset();
     let [frontmatter, content] = matter(data);
     template.innerHTML = stringify(frontmatter) + "\n" + marked.parse(content);
   }
@@ -135,17 +148,17 @@ function postprocess() {
   renderMathInElement(body, {
     delimiters: [
       { left: "$$", right: "$$", display: true },
+      { left: "$`", right: "`$", display: false },
       { left: "$", right: "$", display: false },
     ],
     throwOnError: false,
   });
 
   // Refresh mermaid diagrams.
-  body.querySelectorAll(".mermaid").forEach((el, i) =>
-    mermaid.mermaidAPI.render(`mermaid-${i}`, (el.__mermaid ||= el.textContent), svg => {
-      el.innerHTML = svg;
-    }),
-  );
+  document.querySelectorAll(".mermaid").forEach(el => {
+    el.__mermaid ||= el.textContent;
+  });
+  mermaid.run();
 
   body.classList.remove("loading");
 

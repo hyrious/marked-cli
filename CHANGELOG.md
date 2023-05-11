@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.12
+
+- Upgraded all dependencies.
+- Support new delimiter syntax for math `` $` ``, see https://github.blog/changelog/2023-05-08-new-delimiter-syntax-for-inline-mathematical-expressions.
+
 ## 0.2.11
 
 - Upgraded all dependencies.

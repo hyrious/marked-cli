@@ -2,6 +2,10 @@
 @import "./temp/hljs.css";
 @import "./temp/katex.css";
 
+pre code.hljs {
+  padding: 0;
+}
+
 body {
   transition: opacity 0.2s;
 }
@@ -16,7 +20,7 @@ body.loading {
 
 @media (prefers-color-scheme: dark) {
   .markdown-body {
-    --color-accent-fg: #58a6ff;
+    --color-accent-fg: #2f81f7;
     --color-attention-fg: #d29922;
   }
 }
