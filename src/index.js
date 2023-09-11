@@ -144,6 +144,12 @@ function postprocess() {
   const maybe_title = document.querySelector("h1, h2");
   document.title = maybe_title ? maybe_title.textContent : "Untitled";
 
+  // Move footnotes to the end of document.
+  const footnotes = document.querySelectorAll("section.footnotes");
+  if (footnotes.length) {
+    footnotes.forEach(e => body.insertBefore(e, __END__));
+  }
+
   // Refresh KaTeX.
   renderMathInElement(body, {
     delimiters: [
