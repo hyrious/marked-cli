@@ -26,8 +26,7 @@ marked.use(
   gfmHeadingId(),
   linkify(),
   {
-    langPrefix: "language-",
-    mangle: false,
+    gfm: true,
     extensions: [math, footnoteList, footnote, emoji],
     renderer,
     hooks,

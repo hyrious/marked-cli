@@ -21,6 +21,7 @@ body.loading {
 @media (prefers-color-scheme: dark) {
   .markdown-body {
     --color-accent-fg: #2f81f7;
+    --color-done-fg: #a371f7;
     --color-attention-fg: #d29922;
   }
 }
@@ -28,18 +29,53 @@ body.loading {
 @media (prefers-color-scheme: light) {
   .markdown-body {
     --color-accent-fg: #0969da;
+    --color-done-fg: #8250df;
     --color-attention-fg: #9a6700;
   }
 }
 
-/* styles for **Note** */
+blockquote:has(.octicon) {
+  color: inherit;
+}
+blockquote:has(.octicon-info) {
+  border-left-color: var(--color-accent-fg);
+}
+blockquote:has(.octicon-report) {
+  border-left-color: var(--color-done-fg);
+}
+blockquote:has(.octicon-alert) {
+  border-left-color: var(--color-attention-fg);
+}
+
+/* styles for [!NOTE] */
 .color-fg-accent {
   color: var(--color-accent-fg) !important;
 }
 
-/* styles for **Warning** */
+/* styles for [!IMPORTANT] */
+.color-fg-done {
+  color: var(--color-done-fg) !important;
+}
+
+/* styles for [!WARNING] */
 .color-fg-attention {
   color: var(--color-attention-fg) !important;
+}
+
+.text-semibold {
+  font-weight: 500 !important;
+}
+
+.d-inline-flex {
+  display: inline-flex !important;
+}
+
+.flex-items-center {
+  align-items: center !important;
+}
+
+.mb-1 {
+  margin-bottom: 4px !important;
 }
 
 .mr-2 {

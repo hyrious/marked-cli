@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.13
+
+- Upgraded all dependencies (Marked 9).
+- Changed Note/Warning implementation to match latest behavior (`> [!NOTE]`).
+
 ## 0.2.12
 
 - Upgraded all dependencies.
