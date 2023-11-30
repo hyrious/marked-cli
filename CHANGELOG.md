@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.14
+
+- Upgraded all dependencies (Marked 11).
+- Changed Note/Warning implementation to match latest behavior, see https://github.com/orgs/community/discussions/16925.
+
 ## 0.2.13
 
 - Upgraded all dependencies (Marked 9).
