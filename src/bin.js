@@ -82,21 +82,22 @@ const server = http.createServer((req, res) => {
   // /path.md -> /path.md
   // /path    -> /path/README.md
   else {
-    let path = resolve(decodeURIComponent(url.pathname));
-    if (path && path.endsWith(".md")) {
+    let p = resolve(decodeURIComponent(url.pathname));
+    if (p && p.endsWith(".md")) {
       // If in the browser it is not point to exactly the markdown file,
       // tell the browser to redirect to the file correctly.
       // Otherwise relative links in that file will be broken.
       if (!url.pathname.endsWith(".md")) {
-        res.writeHead(302, { location: "/" + path });
+        res.writeHead(302, { location: "/" + p });
         res.end();
       } else {
         res.writeHead(200, { "content-type": "text/html" });
         res.end(fs.readFileSync(indexHTML, "utf8"));
       }
-    } else if (path) {
-      res.writeHead(200, { "content-type": lookup(path) || "text/plain" });
-      fs.createReadStream(path).pipe(res, { end: true });
+    } else if (p) {
+      let realpath = path.join(cwd, p);
+      res.writeHead(200, { "content-type": lookup(realpath) || "text/plain" });
+      fs.createReadStream(realpath).pipe(res, { end: true });
     } else {
       res.statusCode = 404;
       res.end();
