@@ -206,7 +206,7 @@ export let math = {
 };
 
 // :emoji:
-import full from "markdown-it-emoji/lib/data/full.json";
+import full from "markdown-it-emoji/lib/data/full.mjs";
 
 /** @type {import('marked').TokenizerAndRendererExtension} */
 export let emoji = {
