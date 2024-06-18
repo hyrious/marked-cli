@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.17
+
+- Upgrade github-markdown-css, note that the link color is changed a bit.
+- Pausing upgrading `marked` related libraries since they are migrating to [new renderer implementation](https://github.com/markedjs/marked/releases/tag/v13.0.0).
+  That causes the `renderer` option cannot capture `this` correctly. Maybe I will investigate the
+  new integration when I'm not lazy.
+
+## 0.2.16
+
+- Upgrade all dependencies.
+
+## 0.2.15
+
+- Fix resolving algorithm in folder different from CWD.
+
 ## 0.2.14
 
 - Upgraded all dependencies (Marked 11).
