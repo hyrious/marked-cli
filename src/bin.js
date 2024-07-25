@@ -96,7 +96,11 @@ const server = http.createServer((req, res) => {
       }
     } else if (p) {
       let realpath = path.join(cwd, p);
-      res.writeHead(200, { "content-type": lookup(realpath) || "text/plain" });
+      let contentType = lookup(realpath) || "text/plain";
+      if (realpath.endsWith(".ts")) {
+        contentType = "text/typescript";
+      }
+      res.writeHead(200, { "content-type": contentType });
       fs.createReadStream(realpath).pipe(res, { end: true });
     } else {
       res.statusCode = 404;
