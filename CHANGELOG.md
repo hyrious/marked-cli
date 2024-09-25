@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.18
+## 0.2.19
 
 - Upgrade github-markdown-css and marked.js.
 

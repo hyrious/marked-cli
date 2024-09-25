@@ -27,7 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@highlightjs/cdn-assets": "^11.10.0",
-    "@hyrious/github-markdown-css": "^0.2.3",
+    "@hyrious/github-markdown-css": "^0.2.4",
     "esbuild": "^0.24.0",
     "escape-goat": "^4.0.0",
     "github-slugger": "^2.0.0",
