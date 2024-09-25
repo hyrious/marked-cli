@@ -7,14 +7,18 @@ export function set_repo(current_repo) {
 /** @type {import('marked').RendererObject} */
 export let renderer = {
   // task list
-  list(body, ordered, start) {
+  list({ ordered, start, items }) {
     const tag = ordered ? "ol" : "ul";
+    let body = "";
+    for (const item of items) {
+      body += this.listitem(item);
+    }
     const suffix = body.includes('<li class="task-list-item">')
       ? ' class="contains-task-list">'
       : ` start="${start}">`;
     return "<" + tag + suffix + body + "</" + tag + ">";
   },
-  listitem(text, task, checked) {
+  listitem({ text, task, checked }) {
     if (task) {
       const suffix = checked
         ? 'class="task-list-item-checkbox" type="checkbox" checked>'
@@ -25,18 +29,18 @@ export let renderer = {
     return false;
   },
   // mermaid, katex
-  code(code, lang) {
+  code({ text, lang }) {
     if (lang === "mermaid") {
-      return '<div class="mermaid">' + code + "</div>";
+      return '<div class="mermaid">' + text + "</div>";
     }
     if (lang === "math") {
-      return "<p>$$ " + code + " $$</p>";
+      return "<p>$$ " + text + " $$</p>";
     }
     return false;
   },
   // #issue
-  text(text) {
-    if (repo) {
+  text({ tokens, text }) {
+    if (!tokens && repo) {
       // Ensure not replacing "&#39;".
       // Warn: negative lookbehind (?<!xxx) does not work on safari
       return text.replace(
@@ -47,7 +51,8 @@ export let renderer = {
     return false;
   },
   // [!NOTE]
-  blockquote(quote) {
+  blockquote({ tokens }) {
+    const quote = this.parser.parse(tokens);
     if (quote.startsWith('<p class="markdown-alert-title" dir="auto">')) {
       const index = quote.indexOf("octicon-") + 8;
       if (quote.startsWith("info", index)) {

@@ -1,6 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import tty from "node:tty";
 import prettyBytes from "pretty-bytes";
 import esbuild from "esbuild";
 
@@ -39,21 +38,19 @@ let js = esbuild.build({
   mangleProps: /_$/,
   reserveProps: /^__.*__$/,
   format: "esm",
-  target: "chrome86", // cent browser
+  target: ["es2020", "edge88", "firefox78", "chrome87", "safari14"], // from vite
   outfile: "./index.js",
-  metafile: true,
 });
 
 let css = esbuild.build({
   entryPoints: ["./src/style.css"],
   bundle: true,
   minify: !dev,
-  target: "chrome86",
+  target: ["es2020", "edge88", "firefox78", "chrome87", "safari14"],
   loader: {
     ".woff2": "dataurl",
   },
   outfile: "./style.css",
-  metafile: true,
 });
 
 let bin = esbuild.build({
@@ -64,9 +61,8 @@ let bin = esbuild.build({
   reserveProps: /^__.*__$/,
   platform: "node",
   format: "esm",
-  target: "node16.15.1", // LTS
+  target: "node20.17.0", // LTS
   outfile: "./bin.js",
-  metafile: true,
 });
 
 await Promise.allSettled([bin, js, css]).catch(() => process.exit(1));
@@ -90,15 +86,6 @@ file_with_size.forEach(([file, size, unit]) => {
 });
 console.log();
 console.log(`Finished in ${((elapsed * 100) | 0) / 100}ms.`);
-
-let files = await Promise.all([bin, js, css]).then(r => r.map(e => e.metafile));
-let merged = {};
-for (let { inputs, outputs } of files) {
-  merged.inputs = { ...inputs, ...merged.inputs };
-  merged.outputs = { ...outputs, ...merged.outputs };
-}
-let analytics = await esbuild.analyzeMetafile(merged, { color: tty.WriteStream.prototype.hasColors() });
-console.log(analytics);
 
 // Build index.vscode.html
 {
