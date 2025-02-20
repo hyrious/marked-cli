@@ -17,3 +17,9 @@ body.loading {
 .mermaid {
   text-align: center;
 }
+
+.markdown-body video {
+  min-height: 200px;
+  max-height: 650px;
+  max-width: 100% !important;
+}

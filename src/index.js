@@ -81,7 +81,10 @@ async function on_update(ev) {
     location.reload();
     return;
   }
-
+  // reconnected, ignore this update because a reload is triggered
+  if (!source.onerror) {
+    return;
+  }
   if (typeof data === "object" && data !== null) {
     if (data.repo) {
       set_repo(data.repo);
